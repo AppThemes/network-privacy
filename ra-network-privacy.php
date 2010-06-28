@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:   Network Privacy
-Version:       0.1
+Version:       0.1.1
 Description:   Adds more privacy options to Settings -> Privacy pages and when Network activated: Super Admin -> Options & Sites pages.
 Author:        Ron Rennick
 Author URI:    http://ronandandrea.com/
@@ -75,7 +75,7 @@ class RA_Network_Privacy {
 
 		if( $this->settings['privacy'] < 0 )
 			add_filter( 'pre_option_blog_public', create_function( '', "return {$this->settings['privacy']};" ) );
-		if( ( $privacy = get_option( 'blog_public' ) ) < 0 )
+		if( get_option( 'blog_public' ) < 0 )
 			add_action( 'login_form', array( &$this, 'privacy_login_message' ) );
 	}
 
@@ -162,12 +162,12 @@ class RA_Network_Privacy {
 	}
 
 	function authenticator () {
-		global $current_user;
 		$privacy = get_option( 'blog_public' );
-		if ( is_user_logged_in() )
-			if( $privacy > -2 )
+		if( $privacy > -1 )
+			return;
+		if ( is_user_logged_in() ) {
+			if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
 				return;
-			if( !current_user_can( $this->meta[$privacy]['cap'] ) ) {
 			$this->login_header(); ?>
 					<form name="loginform" id="loginform">
 						<p>Wait 5 seconds or 
@@ -177,15 +177,13 @@ class RA_Network_Privacy {
 				</div>
 			</body>
 		</html>
-		<?php 
-			exit();
-		} else {
+<?php		} else {
 			nocache_headers();
 			header("HTTP/1.1 302 Moved Temporarily");
 			header('Location: ' . get_settings('siteurl') . '/wp-login.php?redirect_to=' . urlencode($_SERVER['REQUEST_URI']));
 	        	header("Status: 302 Moved Temporarily");
-			exit();
 		}
+		exit();
 	}
 
 	function network_privacy_options_page() { ?>
@@ -195,7 +193,7 @@ class RA_Network_Privacy {
 			<th scope="row"><?php _e('Network Privacy'); ?></th>
 			<td><select name="ra_network_privacy" id="ra_network_privacy">
 <?php		for( $i = 0; $i > -4; $i-- ) { ?>
-				<option value="<?php echo $i; ?>" <?php selected( $i, $this->settings['privacy']); ?>><?php _e( $this->meta[$i]['network_label'] ); ?></option>
+				<option value="<?php echo $i; ?>" <?php selected( $i, $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'] ); ?></option>
 <?php		} ?>
 			</select></td>
 		</tr>

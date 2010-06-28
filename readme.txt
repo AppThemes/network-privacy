@@ -45,6 +45,9 @@ Support can be obtained through:
 
 == Changelog ==
 
+= 0.1.1 =
+* fix login redirect check for public & non public sites
+
 = 0.1 =
 * Original version.
 
