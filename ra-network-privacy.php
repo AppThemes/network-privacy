@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:   Network Privacy
-Version:       0.1.1
+Version:       0.1.2
 Description:   Adds more privacy options to Settings -> Privacy pages and when Network activated: Super Admin -> Options & Sites pages.
 Author:        Ron Rennick
 Author URI:    http://ronandandrea.com/
@@ -59,28 +59,28 @@ class RA_Network_Privacy {
 		),
 	);
 
-	function RA_Network_Privacy() {
+	function __construct() {
+
 		$net_settings = get_site_option( 'ra_network_privacy', false );
-		if( is_array( $net_settings ) && !empty( $net_settings['network'] ) )
-			$this->settings = $net_settings;
-		else
-			$this->settings = array( 'network' => 0, 'privacy' => 0 );
-		
-		add_action( 'template_redirect', array( &$this, 'authenticator' ) );
-		add_action( 'do_robots', array( &$this, 'do_robots' ), 1 );
-		add_action( 'wp_head', array( &$this, 'noindex' ), 0 );
-		add_action( 'login_head', array( &$this, 'noindex' ), 1 );
-		add_action( 'admin_init', array( &$this, 'admin_init' ) );
-		add_filter( 'option_ping_sites', array( &$this, 'privacy_ping_filter' ), 1 );
+		$this->settings = is_array( $net_settings ) && !empty( $net_settings['network'] ) ? $net_settings : array( 'network' => 0, 'privacy' => 0 );
+
+		add_action( 'template_redirect', array( $this, 'authenticator' ) );
+		add_action( 'do_robots', array( $this, 'do_robots' ), 1 );
+		add_action( 'wp_head', array( $this, 'noindex' ), 0 );
+		add_action( 'login_head', array( $this, 'noindex' ), 1 );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_filter( 'option_ping_sites', array( $this, 'privacy_ping_filter' ), 1 );
 
 		if( $this->settings['privacy'] < 0 )
 			add_filter( 'pre_option_blog_public', create_function( '', "return {$this->settings['privacy']};" ) );
+
 		if( get_option( 'blog_public' ) < 0 )
 			add_action( 'login_form', array( &$this, 'privacy_login_message' ) );
 	}
 
 	function do_robots() {
-		remove_action('do_robots', 'do_robots');
+
+		remove_action( 'do_robots', 'do_robots' );
 
 		header( 'Content-Type: text/plain; charset=utf-8' );
 
@@ -102,42 +102,52 @@ class RA_Network_Privacy {
 		}
 	}	
 	function noindex() {
+
 		remove_action( 'login_head', 'noindex' );
-		remove_action( 'wp_head', 'noindex',1 );
+		remove_action( 'wp_head', 'noindex', 1 );
 
 		// If the blog is not public, tell robots to go away.
-		if ( '1' != get_option('blog_public') )
+		if ( '1' != get_option( 'blog_public' ) )
 			echo "<meta name='robots' content='noindex,nofollow' />\n";
+
 	}
-	function privacy_ping_filter($sites) {
+	function privacy_ping_filter( $sites ) {
+
 		remove_filter( 'option_ping_sites', 'privacy_ping_filter' );
-		if ( '1' == get_option('blog_public') )
+		if ( '1' == get_option( 'blog_public' ) )
 			return $sites;
 		
 		return '';
+
 	}
 	function sites_add_privacy_options() {
+
 		global $details;
-		?>
-		<h4>More Privacy Options</h4>
+?>
+		<h4>Additional Privacy Options</h4>
 <?php		for( $i = 1; $i > -4; $i-- ) { ?>
-			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public, $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'] ) ?>&nbsp;&nbsp;
-		<br />
+			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'] ); ?><br />
 <?php		}
+
 	}
 	// hook into blog privacy selector(options-privacy.php)
 	function add_privacy_options($options) {
-		$privacy = get_option('blog_public');
-		for( $i = ( is_multisite() ? -1 : -2 ); $i > -4; $i-- ) { ?>
+
+		$privacy = get_option( 'blog_public' );
+		for( $i = ( is_multisite() ? -1 : -2 ); $i > -4; $i-- ) {
+?>
 			<br />
 			<input id="privacy-<?php echo $i; ?>" type="radio" name="blog_public" value="<?php echo $i; ?>" <?php checked( $i, $privacy ); ?> />
 			<label for="privacy-<?php echo $i; ?>"><?php printf( __( 'I would like my site to be visible only to %s.'), $this->meta[$i]['settings_label'] ); ?></label>
-<?php		}
+<?php
+		}
+
 	}
 	function privacy_login_message () {
+
 		$privacy = get_option( 'blog_public' );
 		if( !empty( $this->meta[$privacy]['login_message'] ) )
-			echo '<p>' . bloginfo(name) . __( $this->meta[$privacy]['login_message'] ) . '</p>';
+			echo '<p>' . bloginfo( 'name' ) . __( $this->meta[$privacy]['login_message'] ) . '</p>';
 	}
 
 	// for logged in users to add timed "refresh"
@@ -162,13 +172,18 @@ class RA_Network_Privacy {
 	}
 
 	function authenticator () {
+
 		$privacy = get_option( 'blog_public' );
 		if( $privacy > -1 )
 			return;
+
+		if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
+			return;
+
 		if ( is_user_logged_in() ) {
-			if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
-				return;
-			$this->login_header(); ?>
+
+			$this->login_header();
+?>
 					<form name="loginform" id="loginform">
 						<p>Wait 5 seconds or 
 							<a href="<?php echo get_settings('siteurl'); ?>/wp-login.php">click</a> to continue.</p>
@@ -177,13 +192,16 @@ class RA_Network_Privacy {
 				</div>
 			</body>
 		</html>
-<?php		} else {
-			nocache_headers();
-			header("HTTP/1.1 302 Moved Temporarily");
-			header('Location: ' . get_settings('siteurl') . '/wp-login.php?redirect_to=' . urlencode($_SERVER['REQUEST_URI']));
-	        	header("Status: 302 Moved Temporarily");
+<?php
+			exit;
 		}
-		exit();
+
+		nocache_headers();
+		header( 'HTTP/1.1 302 Moved Temporarily' );
+		header( 'Location: ' . get_settings( 'siteurl' ) . '/wp-login.php?redirect_to=' . urlencode( $_SERVER['REQUEST_URI'] ) );
+        	header( 'Status: 302 Moved Temporarily' );
+		exit;
+
 	}
 
 	function network_privacy_options_page() { ?>
@@ -193,29 +211,35 @@ class RA_Network_Privacy {
 			<th scope="row"><?php _e('Network Privacy'); ?></th>
 			<td><select name="ra_network_privacy" id="ra_network_privacy">
 <?php		for( $i = 0; $i > -4; $i-- ) { ?>
-				<option value="<?php echo $i; ?>" <?php selected( $i, $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'] ); ?></option>
+				<option value="<?php echo $i; ?>" <?php selected( $i == $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'] ); ?></option>
 <?php		} ?>
 			</select></td>
 		</tr>
 		</table> 
 <?php	}
 	function network_privacy_update() {
+
 		$this->settings['privacy'] = (int) $_POST['ra_network_privacy'];
 		update_site_option( 'ra_network_privacy', $this->settings );
+
 	}
 	function admin_init() {
+
 		if( !is_plugin_active( plugin_basename( __FILE__ ) ) )
 			$this->settings['network'] = 1;
+
 		if( is_multisite() ) {
+
 			if( 1 == $this->settings['network'] ) {
-				add_action( 'update_wpmu_options', array( &$this, 'network_privacy_update' ) );
-				add_action( 'wpmu_options', array( &$this, 'network_privacy_options_page' ) );
+
+				add_action( 'update_wpmu_options', array( $this, 'network_privacy_update' ) );
+				add_action( 'wpmu_options', array( $this, 'network_privacy_options_page' ) );
+
 			}
-			if( $this->settings['privacy'] == 0 )
-				add_action( 'wpmueditblogaction', array( &$this, 'sites_add_privacy_options' ) );
 		}
+
 		if( 0 == $this->settings['privacy'] )
-			add_action( 'blog_privacy_selector', array( &$this, 'add_privacy_options' ) );
+			add_action( 'blog_privacy_selector', array( $this, 'add_privacy_options' ) );
 	}
 }
 

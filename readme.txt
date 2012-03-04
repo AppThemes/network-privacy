@@ -1,8 +1,8 @@
 === Network Privacy ===
 Contributors: wpmuguru
 Tags: privacy, plugin, wordpress, network 
-Requires at least: 3.0
-Tested up to: 3.0
+Requires at least: 3.3
+Tested up to: 3.3.1
 Stable tag: trunk
 
 Adds more privacy options to both single Wordpress sites and WordPress networks.
@@ -27,7 +27,6 @@ In a WordPress network activated on an individual site adds the following privac
 When Network Activated or in the mu-plugins folder in a WordPress network adds the following:
 
 *	A privacy selector in the Super Admin -> Options page to allow individual site privacy or the 3 above across to network.
-*	If the network setting is individual privacy the Super Admin -> Edit Site screen has a privacy selector.
 
 Support can be obtained through:
 
@@ -44,6 +43,10 @@ Support can be obtained through:
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.2 =
+* update to be compatible with WP 3.3
+* remove Edit site option due to hook changes in WP
 
 = 0.1.1 =
 * fix login redirect check for public & non public sites
