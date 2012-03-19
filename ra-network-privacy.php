@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:   Network Privacy
-Version:       0.1.2
+Version:       0.1.3
 Description:   Adds more privacy options to Settings -> Privacy pages and when Network activated: Super Admin -> Options & Sites pages.
 Author:        Ron Rennick
 Author URI:    http://ronandandrea.com/
@@ -29,34 +29,41 @@ class RA_Network_Privacy {
 	var $settings = false;
 	var $meta = array(
 		1 => array(
-			'settings_label' => 'Open to search engines',
-			'sites_label' => 'Public (%d)'
+			'settings_label' => __( 'Open to search engines' ),
+			'sites_label' => __( 'Public (%d)' ), 
 		),
 		0 => array(
-			'settings_label' => 'Block search engines',
-			'network_label' => 'Managed per site',
-			'sites_label' => 'No Search (%d)'
+			'settings_label' => __( 'Block search engines' ),
+			'network_label' => __( 'Managed per site' ),
+			'sites_label' => __( 'No Search (%d)' ), 
 		),
-		-1 => array(
-			'login_message' => ' can be viewed by registered users of this network only.',
-			'settings_label' => 'Registered network users',
-			'network_label' => 'Must be registered users',
-			'sites_label' => 'Users only (%d)'
-		),
-		-2 => array(
-			'login_message' => ' can be viewed by registered users of this site only.',
-			'settings_label' => 'Site subscribers',
-			'sites_label' => 'Subscribers only (%d)',
-			'network_label' => 'Must be site subscribers',
+		-1 => apply_filters( 'ra-network-privacy-caps', array(
+			'login_message' => __( ' can be viewed by registered users of this network only.' ),
+			'settings_label' => __( 'Registered network users' ),
+			'network_label' => __( 'Must be registered users' ),
+			'sites_label' => __( 'Users only (%d)' )
+		), -1 ), 
+		-2 => apply_filters( 'ra-network-privacy-caps', array(
+			'login_message' => __( ' can be viewed by registered users of this site only.' ),
+			'settings_label' => __( 'Site subscribers' ),
+			'sites_label' => __( 'Subscribers only (%d)' ),
+			'network_label' => __( 'Must be site subscribers' ),
 			'cap' => 'read'
-		),
-		-3 => array(
-			'login_message' => ' can be viewed by site administrators only.',
-			'settings_label' => 'Site administrators',
-			'sites_label' => 'Administrators only (%d)',
-			'network_label' => 'Must be site administrators',
-			'cap' => 'add_users'
-		),
+		), -2 ), 
+		-3 => apply_filters( 'ra-network-privacy-caps', array(
+			'login_message' => __( ' can be viewed by site administrators only.' ),
+			'settings_label' => __( 'Site administrators' ),
+			'sites_label' => __( 'Administrators only (%d)' ),
+			'network_label' => __( 'Must be site administrators' ),
+			'cap' => 'promote_users'
+		), -3 ), 
+		-4 => apply_filters( 'ra-network-privacy-caps', array(
+			'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.' ),
+			'settings_label' => __( 'Site contributors' ),
+			'sites_label' => __( 'Contributors only (%d)' ),
+			'network_label' => __( 'Must be contributors or above' ),
+			'cap' => 'edit_posts'
+		), -4 ), 
 	);
 
 	function __construct() {
@@ -65,6 +72,7 @@ class RA_Network_Privacy {
 		$this->settings = is_array( $net_settings ) && !empty( $net_settings['network'] ) ? $net_settings : array( 'network' => 0, 'privacy' => 0 );
 
 		add_action( 'template_redirect', array( $this, 'authenticator' ) );
+		add_action( 'bp_screens', array( $this, 'authenticator' ), 0 );
 		add_action( 'do_robots', array( $this, 'do_robots' ), 1 );
 		add_action( 'wp_head', array( $this, 'noindex' ), 0 );
 		add_action( 'login_head', array( $this, 'noindex' ), 1 );
@@ -124,8 +132,8 @@ class RA_Network_Privacy {
 
 		global $details;
 ?>
-		<h4>Additional Privacy Options</h4>
-<?php		for( $i = 1; $i > -4; $i-- ) { ?>
+		<h4><?php _e( 'Additional Privacy Options' ) ?></h4>
+<?php		for( $i = 1; $i > -5; $i-- ) { ?>
 			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'] ); ?><br />
 <?php		}
 
@@ -134,7 +142,7 @@ class RA_Network_Privacy {
 	function add_privacy_options($options) {
 
 		$privacy = get_option( 'blog_public' );
-		for( $i = ( is_multisite() ? -1 : -2 ); $i > -4; $i-- ) {
+		for( $i = ( is_multisite() ? -1 : -2 ); $i > -5; $i-- ) {
 ?>
 			<br />
 			<input id="privacy-<?php echo $i; ?>" type="radio" name="blog_public" value="<?php echo $i; ?>" <?php checked( $i, $privacy ); ?> />
@@ -185,8 +193,8 @@ class RA_Network_Privacy {
 			$this->login_header();
 ?>
 					<form name="loginform" id="loginform">
-						<p>Wait 5 seconds or 
-							<a href="<?php echo get_settings('siteurl'); ?>/wp-login.php">click</a> to continue.</p>
+						<p><?php printf( __( 'Wait 5 seconds or 
+							<a href="%s/wp-login.php">click</a> to continue.' ), get_settings('siteurl') ) ?></p>
 							<?php $this->privacy_login_message (); ?>
 					</form>
 				</div>

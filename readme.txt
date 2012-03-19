@@ -1,9 +1,9 @@
 === Network Privacy ===
-Contributors: wpmuguru
+Contributors: wpmuguru, cgrymala
 Tags: privacy, plugin, wordpress, network 
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: trunk
+Stable tag: 0.1.2
 
 Adds more privacy options to both single Wordpress sites and WordPress networks.
 
@@ -23,6 +23,7 @@ In a WordPress network activated on an individual site adds the following privac
 *	I would like my site to be visible only to Registered network users.
 *	I would like my site to be visible only to Site subscribers.
 *	I would like my site to be visible only to Site administrators.  
+*	I would like my site to be visible only to Site contributors (and above)
 
 When Network Activated or in the mu-plugins folder in a WordPress network adds the following:
 
@@ -43,6 +44,11 @@ Support can be obtained through:
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.3 =
+* add filter for privacy settings
+* change default cap for administrators from add_users to promote_users
+* insert fix for BuddyPress [thanks to Simon Wheatley](http://wordpress.org/support/topic/plugin-network-privacy-problem-with-buddypress)
 
 = 0.1.2 =
 * update to be compatible with WP 3.3
