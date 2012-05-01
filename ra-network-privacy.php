@@ -185,11 +185,11 @@ class RA_Network_Privacy {
 		if( $privacy > -1 )
 			return;
 
-		if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
-			return;
-
 		if ( is_user_logged_in() ) {
 
+			if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
+				return;
+	
 			$this->login_header();
 ?>
 					<form name="loginform" id="loginform">
