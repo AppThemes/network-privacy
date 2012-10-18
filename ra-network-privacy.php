@@ -6,6 +6,7 @@ Description:   Adds more privacy options to Settings -> Privacy pages and when N
 Author:        Ron Rennick
 Author URI:    http://ronandandrea.com/
 Plugin URI:    http://wpmututorials.com/plugins/network-privacy/
+Text Domain:   network-privacy
 
 Original plugin by D Sader (http://www.snowotherway.org/)
 
@@ -29,41 +30,41 @@ class RA_Network_Privacy {
 	var $settings = false;
 	var $meta = array(
 		1 => array(
-			'settings_label' => __( 'Open to search engines' ),
-			'sites_label' => __( 'Public (%d)' ), 
+			'settings_label' => __( 'Open to search engines', 'network-privacy' ),
+			'sites_label' => __( 'Public (%d)', 'network-privacy' ),
 		),
 		0 => array(
-			'settings_label' => __( 'Block search engines' ),
-			'network_label' => __( 'Managed per site' ),
-			'sites_label' => __( 'No Search (%d)' ), 
+			'settings_label' => __( 'Block search engines', 'network-privacy' ),
+			'network_label' => __( 'Managed per site', 'network-privacy' ),
+			'sites_label' => __( 'No Search (%d)', 'network-privacy' ),
 		),
 		-1 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by registered users of this network only.' ),
-			'settings_label' => __( 'Registered network users' ),
-			'network_label' => __( 'Must be registered users' ),
-			'sites_label' => __( 'Users only (%d)' )
-		), -1 ), 
+			'login_message' => __( ' can be viewed by registered users of this network only.', 'network-privacy' ),
+			'settings_label' => __( 'Registered network users', 'network-privacy' ),
+			'network_label' => __( 'Must be registered users', 'network-privacy' ),
+			'sites_label' => __( 'Users only (%d)', 'network-privacy' )
+		), -1 ),
 		-2 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by registered users of this site only.' ),
-			'settings_label' => __( 'Site subscribers' ),
-			'sites_label' => __( 'Subscribers only (%d)' ),
-			'network_label' => __( 'Must be site subscribers' ),
+			'login_message' => __( ' can be viewed by registered users of this site only.', 'network-privacy' ),
+			'settings_label' => __( 'Site subscribers', 'network-privacy' ),
+			'sites_label' => __( 'Subscribers only (%d)', 'network-privacy' ),
+			'network_label' => __( 'Must be site subscribers', 'network-privacy' ),
 			'cap' => 'read'
-		), -2 ), 
+		), -2 ),
 		-3 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by site administrators only.' ),
-			'settings_label' => __( 'Site administrators' ),
-			'sites_label' => __( 'Administrators only (%d)' ),
-			'network_label' => __( 'Must be site administrators' ),
+			'login_message' => __( ' can be viewed by site administrators only.', 'network-privacy' ),
+			'settings_label' => __( 'Site administrators', 'network-privacy' ),
+			'sites_label' => __( 'Administrators only (%d)', 'network-privacy' ),
+			'network_label' => __( 'Must be site administrators', 'network-privacy' ),
 			'cap' => 'promote_users'
-		), -3 ), 
+		), -3 ),
 		-4 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.' ),
-			'settings_label' => __( 'Site contributors' ),
-			'sites_label' => __( 'Contributors only (%d)' ),
-			'network_label' => __( 'Must be contributors or above' ),
+			'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.', 'network-privacy' ),
+			'settings_label' => __( 'Site contributors', 'network-privacy' ),
+			'sites_label' => __( 'Contributors only (%d)', 'network-privacy' ),
+			'network_label' => __( 'Must be contributors or above', 'network-privacy' ),
 			'cap' => 'edit_posts'
-		), -4 ), 
+		), -4 ),
 	);
 
 	function __construct() {
@@ -108,7 +109,7 @@ class RA_Network_Privacy {
 			echo "Disallow: /trackback\n";
 			echo "Disallow: /comments\n";
 		}
-	}	
+	}
 	function noindex() {
 
 		remove_action( 'login_head', 'noindex' );
@@ -124,7 +125,7 @@ class RA_Network_Privacy {
 		remove_filter( 'option_ping_sites', 'privacy_ping_filter' );
 		if ( '1' == get_option( 'blog_public' ) )
 			return $sites;
-		
+
 		return '';
 
 	}
@@ -132,9 +133,9 @@ class RA_Network_Privacy {
 
 		global $details;
 ?>
-		<h4><?php _e( 'Additional Privacy Options' ) ?></h4>
+		<h4><?php _e( 'Additional Privacy Options', 'network-privacy' ) ?></h4>
 <?php		for( $i = 1; $i > -5; $i-- ) { ?>
-			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'] ); ?><br />
+			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'], 'network-privacy' ); ?><br />
 <?php		}
 
 	}
@@ -146,7 +147,7 @@ class RA_Network_Privacy {
 ?>
 			<br />
 			<input id="privacy-<?php echo $i; ?>" type="radio" name="blog_public" value="<?php echo $i; ?>" <?php checked( $i, $privacy ); ?> />
-			<label for="privacy-<?php echo $i; ?>"><?php printf( __( 'I would like my site to be visible only to %s.'), $this->meta[$i]['settings_label'] ); ?></label>
+			<label for="privacy-<?php echo $i; ?>"><?php printf( __( 'I would like my site to be visible only to %s.', 'network-privacy'), $this->meta[$i]['settings_label'] ); ?></label>
 <?php
 		}
 
@@ -155,7 +156,7 @@ class RA_Network_Privacy {
 
 		$privacy = get_option( 'blog_public' );
 		if( !empty( $this->meta[$privacy]['login_message'] ) )
-			echo '<p>' . bloginfo( 'name' ) . __( $this->meta[$privacy]['login_message'] ) . '</p>';
+			echo '<p>' . bloginfo( 'name' ) . __( $this->meta[$privacy]['login_message'], 'network-privacy' ) . '</p>';
 	}
 
 	// for logged in users to add timed "refresh"
@@ -166,10 +167,10 @@ class RA_Network_Privacy {
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml" <?php if ( function_exists('language_attributes') ) language_attributes(); ?>>
 			<head>
-				<title><?php _e("Private Blog Message"); ?></title>
+				<title><?php _e("Private Blog Message", 'network-privacy'); ?></title>
 				<meta http-equiv="refresh" content="5;URL=<?php echo get_settings('siteurl'); ?>/wp-login.php" />
 				<?php wp_admin_css( 'css/login' );
-				wp_admin_css( 'css/colors-fresh' );	?>				
+				wp_admin_css( 'css/colors-fresh' );	?>
 				<link rel="stylesheet" href="css/install.css" type="text/css" />
 				<?php do_action('login_head'); ?>
 			</head>
@@ -189,12 +190,12 @@ class RA_Network_Privacy {
 
 			if( $privacy > -2 || current_user_can( $this->meta[$privacy]['cap'] ) )
 				return;
-	
+
 			$this->login_header();
 ?>
 					<form name="loginform" id="loginform">
-						<p><?php printf( __( 'Wait 5 seconds or 
-							<a href="%s/wp-login.php">click</a> to continue.' ), get_settings('siteurl') ) ?></p>
+						<p><?php printf( __( 'Wait 5 seconds or
+							<a href="%s/wp-login.php">click</a> to continue.', 'network-privacy' ), get_settings('siteurl') ) ?></p>
 							<?php $this->privacy_login_message (); ?>
 					</form>
 				</div>
@@ -213,17 +214,17 @@ class RA_Network_Privacy {
 	}
 
 	function network_privacy_options_page() { ?>
-		<h3><?php _e( 'Network Privacy Selector' ); ?></h3>
+		<h3><?php _e( 'Network Privacy Selector', 'network-privacy' ); ?></h3>
 		<table class="form-table">
-		<tr valign="top"> 
-			<th scope="row"><?php _e('Network Privacy'); ?></th>
+		<tr valign="top">
+			<th scope="row"><?php _e('Network Privacy', 'network-privacy'); ?></th>
 			<td><select name="ra_network_privacy" id="ra_network_privacy">
 <?php		for( $i = 0; $i > -4; $i-- ) { ?>
-				<option value="<?php echo $i; ?>" <?php selected( $i == $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'] ); ?></option>
+				<option value="<?php echo $i; ?>" <?php selected( $i == $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'], 'network-privacy' ); ?></option>
 <?php		} ?>
 			</select></td>
 		</tr>
-		</table> 
+		</table>
 <?php	}
 	function network_privacy_update() {
 
