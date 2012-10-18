@@ -135,7 +135,7 @@ class RA_Network_Privacy {
 ?>
 		<h4><?php _e( 'Additional Privacy Options', 'network-privacy' ) ?></h4>
 <?php		for( $i = 1; $i > -5; $i-- ) { ?>
-			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php _e( $this->meta[$i]['settings_label'], 'network-privacy' ); ?><br />
+			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php echo $this->meta[$i]['settings_label']; ?><br />
 <?php		}
 
 	}
@@ -220,7 +220,7 @@ class RA_Network_Privacy {
 			<th scope="row"><?php _e('Network Privacy', 'network-privacy'); ?></th>
 			<td><select name="ra_network_privacy" id="ra_network_privacy">
 <?php		for( $i = 0; $i > -4; $i-- ) { ?>
-				<option value="<?php echo $i; ?>" <?php selected( $i == $this->settings['privacy'] ); ?>><?php _e( $this->meta[$i]['network_label'], 'network-privacy' ); ?></option>
+				<option value="<?php echo $i; ?>" <?php selected( $i == $this->settings['privacy'] ); ?>><?php echo $this->meta[$i]['network_label']; ?></option>
 <?php		} ?>
 			</select></td>
 		</tr>
