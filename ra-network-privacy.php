@@ -136,21 +136,17 @@ class RA_Network_Privacy {
 
 	// hook into blog privacy selector(options-privacy.php)
 	function add_privacy_options($options) {
+
 		$privacy = get_option( 'blog_public' );
-
-		$dropdown = '';
-
-		for ( $i = ( is_multisite() ? -1 : -2 ); $i > -5; $i-- ) {
-			$dropdown .= sprintf( '<option value="%d"%s>%s</option>', $i, selected( $i, $privacy, false ), $this->meta[$i]['settings_label'] );
+		for( $i = ( is_multisite() ? -1 : -2 ); $i > -5; $i-- ) {
+?>
+			<br />
+			<input id="privacy-<?php echo $i; ?>" type="radio" name="blog_public" value="<?php echo $i; ?>" <?php checked( $i, $privacy ); ?> />
+			<label for="privacy-<?php echo $i; ?>"><?php printf( __( 'I would like my site to be visible only to %s.', 'network-privacy'), $this->meta[$i]['settings_label'] ); ?></label>
+<?php
 		}
 
-		$dropdown = '<select name="blog_public" id="blog_public">' . $dropdown . '</select>';
-
-?>
-		<label for="blog_public"><?php printf( __( 'I would like my site to be visible only to %s.', 'network-privacy' ), $dropdown ); ?></label>
-<?php
 	}
-
 	function privacy_login_message () {
 
 		$privacy = get_option( 'blog_public' );
