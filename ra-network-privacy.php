@@ -25,6 +25,9 @@ TODO -
  * proper gettext calls, pot file & load text domain
 
 */
+
+require dirname(__FILE__) . '/compat.php';
+
 class RA_Network_Privacy {
 
 	private $settings = false;
@@ -186,9 +189,11 @@ class RA_Network_Privacy {
 	}
 
 	function authenticator () {
-
 		$privacy = get_option( 'blog_public' );
 		if( $privacy > -1 )
+			return;
+
+		if ( is_login_page() || is_register_page() )
 			return;
 
 		if ( is_user_logged_in() ) {
