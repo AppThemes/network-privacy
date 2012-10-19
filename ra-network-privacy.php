@@ -210,12 +210,7 @@ class RA_Network_Privacy {
 			exit;
 		}
 
-		nocache_headers();
-		header( 'HTTP/1.1 302 Moved Temporarily' );
-		header( 'Location: ' . get_settings( 'siteurl' ) . '/wp-login.php?redirect_to=' . urlencode( $_SERVER['REQUEST_URI'] ) );
-        	header( 'Status: 302 Moved Temporarily' );
-		exit;
-
+		wp_redirect( wp_login_url( $_SERVER['REQUEST_URI'] ) );
 	}
 
 	function network_privacy_options_page() { ?>
