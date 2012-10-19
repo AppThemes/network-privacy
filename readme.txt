@@ -35,7 +35,7 @@ Support can be obtained through:
 
 [Twitter](http://twitter.com/wpmuguru)
 
-[WPMU Tutorials](http://wpmututorials.com/contact/)
+[Ron & Andrea](http://ronandandrea.com/contact/)
 
 == Installation ==
 
