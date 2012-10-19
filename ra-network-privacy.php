@@ -135,16 +135,7 @@ class RA_Network_Privacy {
 		return '';
 
 	}
-	function sites_add_privacy_options() {
 
-		global $details;
-?>
-		<h4><?php _e( 'Additional Privacy Options', 'network-privacy' ) ?></h4>
-<?php		for( $i = 1; $i > -5; $i-- ) { ?>
-			<input type='radio' name='blog[public]' value='<?php echo $i; ?>' <?php checked( $details->public == $i ); ?> /> <?php echo $this->meta[$i]['settings_label']; ?><br />
-<?php		}
-
-	}
 	// hook into blog privacy selector(options-privacy.php)
 	function add_privacy_options($options) {
 
