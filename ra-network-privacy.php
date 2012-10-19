@@ -26,8 +26,6 @@ TODO -
 
 */
 
-require dirname(__FILE__) . '/compat.php';
-
 class RA_Network_Privacy {
 
 	private $settings = false;
@@ -193,7 +191,8 @@ class RA_Network_Privacy {
 		if( $privacy > -1 )
 			return;
 
-		if ( is_login_page() || is_register_page() )
+		// See if we're not already on the login page
+		if ( did_action( 'login_init' ) )
 			return;
 
 		if ( is_user_logged_in() ) {
