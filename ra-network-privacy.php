@@ -27,47 +27,11 @@ TODO -
 */
 class RA_Network_Privacy {
 
-	var $settings = false;
-	var $meta = array(
-		1 => array(
-			'settings_label' => __( 'Open to search engines', 'network-privacy' ),
-			'sites_label' => __( 'Public (%d)', 'network-privacy' ),
-		),
-		0 => array(
-			'settings_label' => __( 'Block search engines', 'network-privacy' ),
-			'network_label' => __( 'Managed per site', 'network-privacy' ),
-			'sites_label' => __( 'No Search (%d)', 'network-privacy' ),
-		),
-		-1 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by registered users of this network only.', 'network-privacy' ),
-			'settings_label' => __( 'Registered network users', 'network-privacy' ),
-			'network_label' => __( 'Must be registered users', 'network-privacy' ),
-			'sites_label' => __( 'Users only (%d)', 'network-privacy' )
-		), -1 ),
-		-2 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by registered users of this site only.', 'network-privacy' ),
-			'settings_label' => __( 'Site subscribers', 'network-privacy' ),
-			'sites_label' => __( 'Subscribers only (%d)', 'network-privacy' ),
-			'network_label' => __( 'Must be site subscribers', 'network-privacy' ),
-			'cap' => 'read'
-		), -2 ),
-		-3 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed by site administrators only.', 'network-privacy' ),
-			'settings_label' => __( 'Site administrators', 'network-privacy' ),
-			'sites_label' => __( 'Administrators only (%d)', 'network-privacy' ),
-			'network_label' => __( 'Must be site administrators', 'network-privacy' ),
-			'cap' => 'promote_users'
-		), -3 ),
-		-4 => apply_filters( 'ra-network-privacy-caps', array(
-			'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.', 'network-privacy' ),
-			'settings_label' => __( 'Site contributors', 'network-privacy' ),
-			'sites_label' => __( 'Contributors only (%d)', 'network-privacy' ),
-			'network_label' => __( 'Must be contributors or above', 'network-privacy' ),
-			'cap' => 'edit_posts'
-		), -4 ),
-	);
+	private $settings = false;
+	private $meta;
 
 	function __construct() {
+		$this->init_meta();
 
 		$net_settings = get_site_option( 'ra_network_privacy', false );
 		$this->settings = is_array( $net_settings ) && !empty( $net_settings['network'] ) ? $net_settings : array( 'network' => 0, 'privacy' => 0 );
@@ -85,6 +49,47 @@ class RA_Network_Privacy {
 
 		if( get_option( 'blog_public' ) < 0 )
 			add_action( 'login_form', array( &$this, 'privacy_login_message' ) );
+	}
+
+	private function init_meta() {
+		$this->meta = array(
+			1 => array(
+				'settings_label' => __( 'Open to search engines', 'network-privacy' ),
+				'sites_label' => __( 'Public (%d)', 'network-privacy' ),
+			),
+			0 => array(
+				'settings_label' => __( 'Block search engines', 'network-privacy' ),
+				'network_label' => __( 'Managed per site', 'network-privacy' ),
+				'sites_label' => __( 'No Search (%d)', 'network-privacy' ),
+			),
+			-1 => apply_filters( 'ra-network-privacy-caps', array(
+				'login_message' => __( ' can be viewed by registered users of this network only.', 'network-privacy' ),
+				'settings_label' => __( 'Registered network users', 'network-privacy' ),
+				'network_label' => __( 'Must be registered users', 'network-privacy' ),
+				'sites_label' => __( 'Users only (%d)', 'network-privacy' )
+			), -1 ),
+			-2 => apply_filters( 'ra-network-privacy-caps', array(
+				'login_message' => __( ' can be viewed by registered users of this site only.', 'network-privacy' ),
+				'settings_label' => __( 'Site subscribers', 'network-privacy' ),
+				'sites_label' => __( 'Subscribers only (%d)', 'network-privacy' ),
+				'network_label' => __( 'Must be site subscribers', 'network-privacy' ),
+				'cap' => 'read'
+			), -2 ),
+			-3 => apply_filters( 'ra-network-privacy-caps', array(
+				'login_message' => __( ' can be viewed by site administrators only.', 'network-privacy' ),
+				'settings_label' => __( 'Site administrators', 'network-privacy' ),
+				'sites_label' => __( 'Administrators only (%d)', 'network-privacy' ),
+				'network_label' => __( 'Must be site administrators', 'network-privacy' ),
+				'cap' => 'promote_users'
+			), -3 ),
+			-4 => apply_filters( 'ra-network-privacy-caps', array(
+				'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.', 'network-privacy' ),
+				'settings_label' => __( 'Site contributors', 'network-privacy' ),
+				'sites_label' => __( 'Contributors only (%d)', 'network-privacy' ),
+				'network_label' => __( 'Must be contributors or above', 'network-privacy' ),
+				'cap' => 'edit_posts'
+			), -4 ),
+		);
 	}
 
 	function do_robots() {
