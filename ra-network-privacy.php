@@ -94,7 +94,6 @@ class RA_Network_Privacy {
 	}
 
 	function do_robots() {
-
 		remove_action( 'do_robots', 'do_robots' );
 
 		header( 'Content-Type: text/plain; charset=utf-8' );
@@ -116,24 +115,23 @@ class RA_Network_Privacy {
 			echo "Disallow: /comments\n";
 		}
 	}
-	function noindex() {
 
+	function noindex() {
 		remove_action( 'login_head', 'noindex' );
 		remove_action( 'wp_head', 'noindex', 1 );
 
 		// If the blog is not public, tell robots to go away.
 		if ( '1' != get_option( 'blog_public' ) )
 			echo "<meta name='robots' content='noindex,nofollow' />\n";
-
 	}
-	function privacy_ping_filter( $sites ) {
 
+	function privacy_ping_filter( $sites ) {
 		remove_filter( 'option_ping_sites', 'privacy_ping_filter' );
+
 		if ( '1' == get_option( 'blog_public' ) )
 			return $sites;
 
 		return '';
-
 	}
 
 	// hook into blog privacy selector(options-privacy.php)
@@ -224,15 +222,15 @@ class RA_Network_Privacy {
 			</select></td>
 		</tr>
 		</table>
-<?php	}
-	function network_privacy_update() {
+<?php
+	}
 
+	function network_privacy_update() {
 		$this->settings['privacy'] = (int) $_POST['ra_network_privacy'];
 		update_site_option( 'ra_network_privacy', $this->settings );
-
 	}
-	function admin_init() {
 
+	function admin_init() {
 		if( !is_plugin_active( plugin_basename( __FILE__ ) ) )
 			$this->settings['network'] = 1;
 
@@ -261,7 +259,9 @@ function ra_network_privacy_activate() {
 	update_site_option( 'ra_network_privacy', $settings );
 }
 register_activation_hook( __FILE__, 'ra_network_privacy_activate' );
+
 function ra_network_privacy_deactivate() {
 	delete_site_option( 'ra_network_privacy' );
 }
 register_deactivation_hook( __FILE__, 'ra_network_privacy_deactivate' );
+
