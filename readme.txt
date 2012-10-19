@@ -31,7 +31,7 @@ When Network Activated or in the mu-plugins folder in a WordPress network adds t
 
 Support can be obtained through:
 
-[Try the Wordpress Forums first](http://wordpress.org/tags/network-privacy?forum_id=10#postform)
+[Try the Wordpress Forums first](http://wordpress.org/support/plugin/network-privacy)
 
 [Twitter](http://twitter.com/wpmuguru)
 
