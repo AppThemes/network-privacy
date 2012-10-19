@@ -54,15 +54,6 @@ class RA_Network_Privacy {
 
 	private function init_meta() {
 		$this->meta = array(
-			1 => array(
-				'settings_label' => __( 'Open to search engines', 'network-privacy' ),
-				'sites_label' => __( 'Public (%d)', 'network-privacy' ),
-			),
-			0 => array(
-				'settings_label' => __( 'Block search engines', 'network-privacy' ),
-				'network_label' => __( 'Managed per site', 'network-privacy' ),
-				'sites_label' => __( 'No Search (%d)', 'network-privacy' ),
-			),
 			-1 => apply_filters( 'ra-network-privacy-caps', array(
 				'login_message' => __( ' can be viewed by registered users of this network only.', 'network-privacy' ),
 				'settings_label' => __( 'Registered network users', 'network-privacy' ),
