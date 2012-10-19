@@ -53,35 +53,37 @@ class RA_Network_Privacy {
 	}
 
 	private function init_meta() {
-		$this->meta = array(
-			-1 => apply_filters( 'ra-network-privacy-caps', array(
+		$options = array(
+			-1 => array(
 				'login_message' => __( ' can be viewed by registered users of this network only.', 'network-privacy' ),
 				'settings_label' => __( 'Registered network users', 'network-privacy' ),
 				'network_label' => __( 'Must be registered users', 'network-privacy' ),
 				'sites_label' => __( 'Users only (%d)', 'network-privacy' )
-			), -1 ),
-			-2 => apply_filters( 'ra-network-privacy-caps', array(
+			),
+			-2 => array(
 				'login_message' => __( ' can be viewed by registered users of this site only.', 'network-privacy' ),
 				'settings_label' => __( 'Site subscribers', 'network-privacy' ),
 				'sites_label' => __( 'Subscribers only (%d)', 'network-privacy' ),
 				'network_label' => __( 'Must be site subscribers', 'network-privacy' ),
 				'cap' => 'read'
-			), -2 ),
-			-3 => apply_filters( 'ra-network-privacy-caps', array(
+			),
+			-3 => array(
 				'login_message' => __( ' can be viewed by site administrators only.', 'network-privacy' ),
 				'settings_label' => __( 'Site administrators', 'network-privacy' ),
 				'sites_label' => __( 'Administrators only (%d)', 'network-privacy' ),
 				'network_label' => __( 'Must be site administrators', 'network-privacy' ),
 				'cap' => 'promote_users'
-			), -3 ),
-			-4 => apply_filters( 'ra-network-privacy-caps', array(
+			),
+			-4 => array(
 				'login_message' => __( ' can be viewed only by contributors and above. Subscribers and logged-out users are not able to view this site.', 'network-privacy' ),
 				'settings_label' => __( 'Site contributors', 'network-privacy' ),
 				'sites_label' => __( 'Contributors only (%d)', 'network-privacy' ),
 				'network_label' => __( 'Must be contributors or above', 'network-privacy' ),
 				'cap' => 'edit_posts'
-			), -4 ),
+			),
 		);
+
+		$this->meta = apply_filters( 'ra_network_privacy_caps', $options );
 	}
 
 	function do_robots() {
