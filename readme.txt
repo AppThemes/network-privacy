@@ -46,7 +46,7 @@ Support can be obtained through:
 == Changelog ==
 
 = 0.1.4 =
-* add filters for privacy settings
+* add 'ra_network_privacy_caps' filter
 * change default cap for administrators from add_users to promote_users
 * insert fix for BuddyPress [thanks to Simon Wheatley](http://wordpress.org/support/topic/plugin-network-privacy-problem-with-buddypress)
 
@@ -62,8 +62,3 @@ Support can be obtained through:
 
 = 0.1 =
 * Original version.
-
-== Upgrade Notice ==
-
-= 0.1.3 =
-This update should repair the bug in the "Network Users Only" privacy option
