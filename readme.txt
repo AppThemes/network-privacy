@@ -1,8 +1,8 @@
 === Network Privacy ===
-Contributors: wpmuguru, cgrymala
+Contributors: wpmuguru, cgrymala, scribu
 Tags: privacy, plugin, wordpress, network 
 Requires at least: 3.3
-Tested up to: 3.3.1
+Tested up to: 3.4
 Stable tag: 0.1.3
 
 Adds more privacy options to both single Wordpress sites and WordPress networks.
@@ -46,7 +46,7 @@ Support can be obtained through:
 == Changelog ==
 
 = 0.1.4 =
-* add filter for privacy settings
+* add filters for privacy settings
 * change default cap for administrators from add_users to promote_users
 * insert fix for BuddyPress [thanks to Simon Wheatley](http://wordpress.org/support/topic/plugin-network-privacy-problem-with-buddypress)
 
